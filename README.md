@@ -59,3 +59,7 @@ curl http://localhost:3000/api/todo/list
 ```
 
 ***
+### blog
+
+https://zenn.dev/knaka0209/scraps/b7084214f1a41d
+
