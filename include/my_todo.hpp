@@ -12,14 +12,6 @@ using json = nlohmann::json;
 
 const std::string FILE_PATH = "todos.json";
 
-/*
-struct Todo {
-    int id;
-    std::string title;
-};
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Todo, id, title)
-*/
-
 struct TodoData {
     int max_id;
     std::vector<Todo> items;
@@ -92,6 +84,31 @@ private:
         for (const auto& item : data.items) {
             std::cout << "[" << item.id << "] " << item.title << "\n";
         }
+    }   
+
+    std::string dialog_show(int id) {
+        std::string ret = "";
+
+        TodoData data = load_data();
+        if (data.items.empty()) {
+            std::cout << "TODO none\n";
+            return ret;
+        }
+        Todo row;
+        row.id = 0;
+        row.title = "";
+        for (const auto& item : data.items) {
+            if (item.id == id) {
+                row.id = item.id;
+                row.title = item.title;
+            }
+            std::cout << "[" << item.id << "] " << item.title << "\n";
+        }
+
+        MySsr sLib("");
+        std::string out = sLib.renderDialog(row);
+        ret = out;
+        return ret;
     }   
 
     std::string list_json(const TodoData& data) {

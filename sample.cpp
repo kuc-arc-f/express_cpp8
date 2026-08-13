@@ -35,6 +35,14 @@ extern "C" {
         return output;    
     }
 
+    char* dialog_show(int id){
+        MyTodo tLib("");
+        std::string result = tLib.dialog_show(id);
+        char* output = new char[result.length() + 1];
+        strcpy(output, result.c_str());
+        return output;    
+    }
+
     char* todo_add(const char* input) {
         std::string input_str(input);
         //std::cout << "todo_add.Received in C++: " << input_str << std::endl;

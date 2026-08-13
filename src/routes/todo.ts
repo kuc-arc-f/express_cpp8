@@ -1,6 +1,5 @@
 import express from 'express';
 import LibLoad from "../../LibLoad"
-import { renderDialog } from "./TodoHx"
 
 const router = express.Router();
 
@@ -44,21 +43,15 @@ router.get('/get/:id', async function(req, res) {
   try {
     const lib = LibLoad.getLib();
     const todo_list = lib.func('char* todo_list()');    
+    const dialog_show = lib.func(
+        "dialog_show",
+        "char*",
+        ["int"]
+    );    
     const id = req.params.id;
     console.log("id=", id)
-    const resp = todo_list();
-    if(resp){
-      const out = JSON.parse(resp)
-      console.log(out)
-      const todo = out.filter(row => row.id === Number(id));
-      //console.log(todo)
-      if(todo[0]){
-        const ht_str = renderDialog(todo[0])
-        return res.send(ht_str);
-      }
-      return res.send("");
-    }
-    return res.send("");
+    const resp = dialog_show(Number(id));
+    return res.send(resp);
   } catch (error) {
     console.error(error);
     res.sendStatus(500);
