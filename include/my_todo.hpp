@@ -5,15 +5,20 @@
 #include <string>
 #include "nlohmann/json.hpp"
 
+#include "my_type.hpp"
+#include "my_ssr.hpp"
+
 using json = nlohmann::json;
 
 const std::string FILE_PATH = "todos.json";
 
+/*
 struct Todo {
     int id;
     std::string title;
 };
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Todo, id, title)
+*/
 
 struct TodoData {
     int max_id;
@@ -145,6 +150,21 @@ private:
         try{
             TodoData data = load_data(); 
             ret = list_json(data);
+            return ret;
+        } catch (const std::exception& e) {
+            std::cout << "Error , main" << std::endl;
+            return ret;
+        }  
+    }
+
+    std::string todo_list_elem(){
+        std::string ret = "";
+        try{
+            TodoData data = load_data(); 
+            //ret = list_json(data);
+            MySsr sLib("");
+            std::string resp = sLib.renderTodoList(data.items);
+            ret = resp;
             return ret;
         } catch (const std::exception& e) {
             std::cout << "Error , main" << std::endl;

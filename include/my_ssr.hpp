@@ -2,6 +2,8 @@
 #include <iostream>
 #include <string>
 
+#include "my_type.hpp"
+
 class MySsr {
 private:
   std::string m_name = "";
@@ -67,5 +69,57 @@ public:
         ret = text;
         return ret;
     }
+
+
+    std::string renderTodoList(const std::vector<Todo>& todos) {
+        std::string html = R"(
+        <div class="bg-white w-3xl rounded-xl shadow-sm border border-stone-200 overflow-hidden" id="todo-container">
+        <div>
+            <a href="/" class="font-bold ms-4" >Home</a>
+            <a href="/about" class="ms-4" >[ about ]</a>
+            <hr class="my-2" />
+        </div>
+        
+        <div class="p-6 border-b border-stone-200">
+            <h1 class="text-2xl font-semibold text-stone-800">Todo List</h1>
+            <form class="mt-4 flex gap-2" hx-post="/api/todo/create" hx-target="#todo-container" hx-swap="outerHTML">
+            <input type="text" name="title" required placeholder="Add a new task..." class="flex-1 px-4 py-2 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-stone-500 focus:border-transparent" />
+            <button type="submit" class="px-4 py-2 bg-stone-800 text-white rounded-lg hover:bg-stone-700 transition-colors font-medium">Add</button>
+            </form>
+        </div>
+        <ul class="divide-y divide-stone-100">
+    )";
+
+    for (const auto& todo : todos) {
+        html += "          <li class=\"group flex items-center justify-between p-4 hover:bg-stone-50 cursor-pointer transition-colors\" \n";
+        html += "              hx-get=\"/api/todo/get/" + std::to_string(todo.id) + "\" \n";
+        html += "              hx-target=\"#dialog-container\" \n";
+        html += "              hx-swap=\"innerHTML\">\n";
+        html += "            <div class=\"flex items-center gap-3\">\n";
+        html += "              <span class=\"text-stone-800 font-medium";
+        html += "\">" + todo.title + "</span>\n";
+        html += "            </div>\n";
+        html += "            <form class=\"mt-4 flex gap-2\" hx-post=\"/api/todo/delete\" hx-target=\"#todo-container\" hx-swap=\"outerHTML\">\n";
+        html += "              <input type=\"hidden\" name=\"id\"  value=\"" + std::to_string(todo.id) + "\" />\n";
+        html += R"(              <button class=\"text-stone-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity p-2\"
+                      onclick=\"event.stopPropagation()\">Delete
+              </button>
+            </form>
+          </li>
+        )";
+    }
+
+        if (todos.empty()) {
+            html += "        <li class=\"p-8 text-center text-stone-500\">No tasks yet. Add one above!</li>\n";
+        }
+
+        html += R"(      </ul>
+        <div id="dialog-container"></div>
+        </div>
+    )";
+
+    return html;
+}
+
 
 };

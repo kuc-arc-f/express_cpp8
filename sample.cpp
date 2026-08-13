@@ -27,6 +27,14 @@ extern "C" {
         return output;    
     }
 
+    char* todo_list_elem(){
+        MyTodo tLib("");
+        std::string result = tLib.todo_list_elem();
+        char* output = new char[result.length() + 1];
+        strcpy(output, result.c_str());
+        return output;    
+    }
+
     char* todo_add(const char* input) {
         std::string input_str(input);
         //std::cout << "todo_add.Received in C++: " << input_str << std::endl;

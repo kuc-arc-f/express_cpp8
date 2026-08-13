@@ -1,6 +1,6 @@
 import express from 'express';
 import LibLoad from "../../LibLoad"
-import { renderTodoList, renderDialog } from "./TodoHx"
+import { renderDialog } from "./TodoHx"
 
 const router = express.Router();
 
@@ -13,14 +13,10 @@ router.post('/create', async function(req, res) {
     const body = req.body
     console.log(body);
     todoAdd(body.title);
-    const resp = todo_list();
-    if(resp){
-      const out = JSON.parse(resp)
-      //console.log(out)
-      const ht_str = renderTodoList(out)
-      return res.send(ht_str);
-    }
-    return res.send("")    
+    const todo_list_elem = lib.func('char* todo_list_elem()'); 
+    //console.log(body);
+    const resp = todo_list_elem();
+     return res.send(resp);
   } catch (error) {
     console.error(error);
     res.sendStatus(500);
@@ -31,18 +27,12 @@ router.get('/list', async function(req, res) {
   const retObj = {ret: 500, data: null};
   try {
     const lib = LibLoad.getLib();
-    const todo_list = lib.func('char* todo_list()');    
+    const todo_list = lib.func('char* todo_list()'); 
+    const todo_list_elem = lib.func('char* todo_list_elem()'); 
     const body = req.body
     //console.log(body);
-    const resp = todo_list();
-    if(resp){
-      const out = JSON.parse(resp)
-      console.log(out)
-      const ht_str = renderTodoList(out)
-      //console.log(ht_str)
-      return res.send(ht_str);
-    }
-    return res.send("");    
+    const resp = todo_list_elem();
+    return res.send(resp);
   } catch (error) {
     console.error(error);
     res.sendStatus(500);
@@ -79,7 +69,7 @@ router.post('/delete', async function(req, res) {
   const retObj = {ret: 500, data: null};
   try {
     const lib = LibLoad.getLib();
-    const todo_list = lib.func('char* todo_list()'); 
+    //const todo_list = lib.func('char* todo_list()'); 
     const todo_delete = lib.func(
         "todo_delete",
         "int",
@@ -88,14 +78,10 @@ router.post('/delete', async function(req, res) {
     const body = req.body
     console.log(body);
     todo_delete(Number(body.id));
-    const resp = todo_list();
-    if(resp){
-      const out = JSON.parse(resp)
-      //console.log(out)
-      const ht_str = renderTodoList(out)
-      return res.send(ht_str);
-    }
-    return res.send("")    
+    const todo_list_elem = lib.func('char* todo_list_elem()'); 
+    //console.log(body);
+    const resp = todo_list_elem();
+    return res.send(resp);
   } catch (error) {
     console.error(error);
     res.sendStatus(500);
