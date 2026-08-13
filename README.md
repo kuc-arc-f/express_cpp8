@@ -1,10 +1,10 @@
 ﻿# express_cpp8
 
- Version: 0.9.1
+ Version: 0.9.2
 
  Author  :
 
- date    : 2026/08/11 
+ date    : 2026/08/12 
  
  update :
 
@@ -57,6 +57,10 @@ curl -X POST -H "Content-Type: application/json" \
 ```
 curl http://localhost:3000/api/todo/list
 ```
+
+***
+### version
+* V_0_9_1: new
 
 ***
 ### blog
